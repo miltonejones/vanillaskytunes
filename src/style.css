@@ -1,0 +1,308 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.detail-image {
+  width: 180px;
+  height: 180px;
+}
+
+.workspace {
+  padding: 1rem;
+  width: 65vw;
+  margin: 60px auto;
+  margin-bottom: 100px;
+}
+
+.workspace.playing {
+  margin-bottom: 200px;
+}
+.podcast-carousel-container {
+  position: relative;
+  width: 100%;
+  height: 35vh;
+  margin: 1rem 0;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Slide Animations */
+.slide-in-right {
+  animation: slideInRight 0.5s ease-in-out forwards;
+}
+
+.slide-out-left {
+  animation: slideOutLeft 0.5s ease-in-out forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-in-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide Content */
+.podcast-slide-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* FIXED: Background image fills entire carousel */
+.slide-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.slide-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* REMOVE the artwork-outer and podcast-artwork styles completely */
+.artwork-outer {
+  display: none; /* Hide the artwork container */
+}
+
+.podcast-artwork {
+  display: none; /* Hide the duplicate image */
+}
+
+.podcast-info {
+  position: absolute;
+  left: 90px;
+  bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
+  width: 50%;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.podcast-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.podcast-artist {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.podcast-meta {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.podcast-actions {
+  margin-top: 1rem;
+}
+
+/* Navigation Arrows */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-arrow:hover:not(:disabled) {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.carousel-arrow-prev {
+  left: 20px;
+}
+
+.carousel-arrow-next {
+  right: 20px;
+}
+
+/* Indicators */
+.carousel-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+.indicator:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(1.1);
+}
+
+.indicator:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .podcast-carousel-container {
+    height: 20vh;
+  }
+  .player-track-info,
+  .skip-btn {
+    display: none;
+  }
+
+  .detail-image {
+    width: 72px;
+    height: 72px;
+  }
+
+  .podcast-title {
+    font-size: 0.9rem;
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .podcast-meta,
+  .podcast-artist {
+    font-size: 0.8rem;
+    display: none;
+  }
+
+  .podcast-info {
+    left: 60px;
+    width: 80vw;
+    max-width: 80vw;
+    padding: 1rem;
+    overflow: hidden;
+  }
+
+  .carousel-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .podcast-info {
+    max-width: 80%;
+    bottom: 20px;
+  }
+
+  .podcast-title {
+    font-size: 1.3rem;
+  }
+
+  .workspace {
+    padding: 1rem;
+    width: 100vw;
+    margin: 60px auto;
+    margin-bottom: 100px;
+  }
+
+  .workspace.playing {
+    margin-bottom: 200px;
+  }
+}
+
+.toast img {
+  width: 24px;
+  height: 24px;
+}

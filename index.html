@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="STATECAST" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="icon" type="image/png" href="/icon-192.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1976d2" />
+    <title>STATECAST</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body.player-open {
+        padding-bottom: 120px;
+      }
+
+      #audio-player-container {
+        position: fixed;
+        bottom: -200px;
+        left: 0;
+        width: 100%;
+        background: white;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        transition: bottom 0.3s ease;
+        z-index: 1050;
+      }
+
+      .player-controls {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        padding: 0.5rem;
+      }
+
+      .player-track-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-width: 300px;
+      }
+
+      .player-track-image {
+        width: 72px;
+        height: 72px;
+        border-radius: 5px;
+        object-fit: cover;
+      }
+
+      .player-track-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin: 0;
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .player-buttons {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .player-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #333;
+        transition: color 0.2s;
+        position: relative;
+      }
+
+      .player-btn:hover {
+        color: rgb(25, 118, 210);
+      }
+
+      .player-btn-large {
+        font-size: 2rem;
+      }
+
+      .skip-btn-label {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.5rem;
+        font-weight: 700;
+        pointer-events: none;
+      }
+
+      .player-progress {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-width: 200px;
+      }
+
+      .player-time {
+        font-size: 0.75rem;
+        color: #666;
+        min-width: 40px;
+        text-align: center;
+      }
+
+      .player-slider {
+        flex: 1;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 4px;
+        background: #ddd;
+        border-radius: 2px;
+        outline: none;
+      }
+
+      .player-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        background: rgb(25, 118, 210);
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .player-slider::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        background: rgb(25, 118, 210);
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <i class="fa-solid fa-podcast"></i>
+          <strong class="me-auto toast-title">Bootstrap</strong>
+          <small class="toast-caption">11 mins ago</small>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="toast-body">Hello, world! This is a toast message.</div>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a
+          class="navbar-brand fw-bold cursor-pointer"
+          style="color: rgb(25, 118, 210)"
+          data-view="home"
+        >
+          <i class="fa-solid fa-podcast" style="color: white"></i>
+          STATE<b style="color: white">CAST</b>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link cursor-pointer" data-view="home">
+                <i class="fa-solid fa-house"></i> Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link cursor-pointer" data-view="categories">
+                <i class="fa-solid fa-book"></i> Categories
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link cursor-pointer" data-view="subscriptions">
+                <i class="fa-solid fa-bookmark"></i> Subscriptions
+                <span
+                  id="subscription-count"
+                  class="badge bg-light text-primary"
+                  >(0)</span
+                >
+              </a>
+            </li>
+          </ul>
+
+          <form class="d-flex">
+            <div id="loading-spinner" class="text-center">
+              <div class="spinner-border text-danger" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search podcasts..."
+              aria-label="Search"
+              value=""
+            />
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class="workspace">
+      <div id="extra"></div>
+      <div id="app" class="row"></div>
+    </div>
+    <div
+      class="offcanvas offcanvas-start"
+      tabindex="-1"
+      id="offcanvas"
+      aria-labelledby="offcanvasLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" data-display="title" id="offcanvasLabel">
+          Offcanvas
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body" id="offbody">
+        Content for the offcanvas goes here. You can place just about any
+        Bootstrap component or custom elements here.
+      </div>
+    </div>
+    <!-- Audio Player -->
+    <div id="audio-player-container">
+      <div class="player-controls">
+        <!-- Track Info -->
+        <div class="player-track-info">
+          <img
+            data-display="image"
+            class="player-track-image"
+            src=""
+            alt="Track artwork"
+            style="display: none"
+          />
+          <div>
+            <p class="player-track-title" data-display="title">
+              No track playing
+            </p>
+          </div>
+        </div>
+
+        <!-- Playback Controls <i class="fa-solid fa-list-check"></i> -->
+        <div class="player-buttons">
+          <button
+            class="player-btn"
+            data-action="show-menu"
+            title="Show playlist"
+          >
+            <i class="fa-solid fa-list-check"></i>
+          </button>
+
+          <button
+            class="player-btn skip-btn"
+            data-action="skip-back"
+            title="Rewind 30 seconds"
+          >
+            <i class="fa-solid fa-arrow-rotate-left"></i>
+            <span class="skip-btn-label">30</span>
+          </button>
+
+          <button
+            class="player-btn player-btn-large"
+            data-action="play-pause"
+            title="Play/Pause"
+          >
+            <i data-icon="play-pause" class="fa-solid fa-circle-play"></i>
+          </button>
+
+          <button
+            class="player-btn skip-btn"
+            data-action="skip-forward"
+            title="Forward 30 seconds"
+          >
+            <i class="fa-solid fa-arrow-rotate-right"></i>
+            <span class="skip-btn-label">30</span>
+          </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="player-progress">
+          <span class="player-time" data-display="current-time">0:00</span>
+          <input
+            type="range"
+            class="player-slider"
+            data-control="progress"
+            min="0"
+            max="100"
+            value="0"
+          />
+          <span class="player-time" data-display="duration">0:00</span>
+        </div>
+
+        <!-- Close Button -->
+        <button class="player-btn" data-action="close" title="Close player">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/src/store.ts"></script>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "resultCount": 100,
+  "results": [
+    {
+      "wrapperType": "track",
+      "kind": "podcast",
+      "artistId": 1378608691,
+      "collectionId": 1377843908,
+      "trackId": 1377843908,
+      "artistName": "Popular Science",
+      "collectionName": "The Weirdest Thing I Learned This Week",
+      "trackName": "The Weirdest Thing I Learned This Week",
+      "collectionCensoredName": "The Weirdest Thing I Learned This Week",
+      "trackCensoredName": "The Weirdest Thing I Learned This Week",
+      "artistViewUrl": "https://podcasts.apple.com/us/artist/popular-science/1378608691?uo=4",
+      "collectionViewUrl": "https://podcasts.apple.com/us/podcast/the-weirdest-thing-i-learned-this-week/id1377843908?uo=4",
+      "feedUrl": "https://feeds.megaphone.fm/RECU9765916949",
+      "trackViewUrl": "https://podcasts.apple.com/us/podcast/the-weirdest-thing-i-learned-this-week/id1377843908?uo=4",
+      "artworkUrl30": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts112/v4/aa/c3/c0/aac3c008-559b-16c2-ea44-dae3e69f0d48/mza_15550219831259443241.jpg/30x30bb.jpg",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts112/v4/aa/c3/c0/aac3c008-559b-16c2-ea44-dae3e69f0d48/mza_15550219831259443241.jpg/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts112/v4/aa/c3/c0/aac3c008-559b-16c2-ea44-dae3e69f0d48/mza_15550219831259443241.jpg/100x100bb.jpg",
+      "collectionPrice": 0.0,
+      "trackPrice": 0.0,
+      "collectionHdPrice": 0,
+      "releaseDate": "2025-11-05T08:00:00Z",
+      "collectionExplicitness": "notExplicit",
+      "trackExplicitness": "cleaned",
+      "trackCount": 215,
+      "trackTimeMillis": 3844,
+      "country": "USA",
+      "currency": "USD",
+      "primaryGenreName": "Science",
+      "contentAdvisoryRating": "Clean",
+      "artworkUrl600": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts112/v4/aa/c3/c0/aac3c008-559b-16c2-ea44-dae3e69f0d48/mza_15550219831259443241.jpg/600x600bb.jpg",
+      "genreIds": ["1533", "26", "1304"],
+      "genres": ["Science", "Podcasts", "Education"]
+    }
+  ]
+}
