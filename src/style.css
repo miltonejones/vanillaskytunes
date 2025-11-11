@@ -14,9 +14,13 @@
   margin-bottom: 100px;
 }
 
-.workspace.playing {
-  margin-bottom: 200px;
+body.player-open .workspace {
+  margin-bottom: 140px;
 }
+
+/* .workspace.playing {
+  margin-bottom: 200px;
+} */
 .podcast-carousel-container {
   position: relative;
   width: 100%;
@@ -239,6 +243,9 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .desktop {
+    display: none;
+  }
   .podcast-carousel-container {
     height: 20vh;
   }
@@ -305,4 +312,20 @@
 .toast img {
   width: 24px;
   height: 24px;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background-color: rgb(33, 37, 41);
+  display: flex;
+  color: white;
+  padding: 0.5rem;
+  gap: 1rem;
+}
+
+.spacer {
+  flex-grow: 1;
 }

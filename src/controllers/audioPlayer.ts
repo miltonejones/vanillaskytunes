@@ -177,10 +177,10 @@ export class AudioPlayer {
 
     // Update visibility
     if (isOpen) {
-      this.playerElement.style.bottom = "0";
+      // this.playerElement.style.bottom = "40px";
       document.body.classList.add("player-open");
     } else {
-      this.playerElement.style.bottom = "-200px";
+      // this.playerElement.style.bottom = "-200px";
       document.body.classList.remove("player-open");
     }
 
