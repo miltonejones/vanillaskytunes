@@ -16,7 +16,7 @@ export function renderSubscriptions(state: IState, limit: boolean = false) {
   <div class="row">
       <div class="col-12 d-flex justify-content-between mb-2">
           <h4>${state.subscriptions.length} Subscriptions</h4>
-          <button  class="btn btn-outline-primary btn-sm" data-view="subscriptions">View all <i class="fa-solid fa-arrow-right"></i></button>
+          <button  class="btn btn-light btn-sm" data-view="subscriptions">View all <i class="fa-solid fa-arrow-right"></i></button>
       </div>
       ${state.subscriptions
         .slice(0, 6)

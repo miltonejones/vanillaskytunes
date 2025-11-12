@@ -6,17 +6,7 @@ export function createPodcastCarousel(podcasts: IPodcast[]): string {
     return '<div class="text-center p-4">No podcasts to display</div>';
   }
 
-  const totalPodcasts = podcasts.length;
   const currentPodcast = podcasts[0];
-
-  // Generate arrows HTML
-  const arrowsHtml =
-    totalPodcasts > 1
-      ? `
-      <button class="carousel-arrow carousel-arrow-prev">‹</button>
-      <button class="carousel-arrow carousel-arrow-next">›</button>
-    `
-      : "";
 
   return `
   <h4>Listen Now</h4>
@@ -26,7 +16,7 @@ export function createPodcastCarousel(podcasts: IPodcast[]): string {
           <div class="carousel-slide current">
             ${createPodcastSlide(currentPodcast, true)}
           </div>
-          ${arrowsHtml} 
+          
         </div>
       </div>
     `;
@@ -72,7 +62,7 @@ function createPodcastSlide(
             >
               <button 
                 data-podcast='${safePodcastData}'
-                class="btn btn-primary me-2 podcast-item"  
+                class="btn btn-primary btn-sm me-2 podcast-item"  
               >
                 Listen Now
               </button>

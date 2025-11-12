@@ -1,3 +1,4 @@
+import "./player.css";
 import "./style.css";
 import type { IPodcast, IState } from "./interfaces";
 
@@ -12,7 +13,7 @@ import { PodcastCarouselController } from "./controllers/carousel";
 import { AudioPlayer } from "./controllers/audioPlayer";
 import { PodcastStore } from "./store";
 
-class PodcastApp {
+export class PodcastApp {
   store;
   initialized = false;
   eventsBound = false;
@@ -35,7 +36,6 @@ class PodcastApp {
   async initializeApp() {
     if (this.store) {
       this.store.subscribe((state: IState) => {
-        // alert(JSON.stringify(state));
         this.render(state);
       });
 
@@ -58,7 +58,7 @@ class PodcastApp {
     const searchInput = document.querySelector(
       'input[type="search"]'
     ) as HTMLInputElement;
-    let timeoutId: number | null = null;
+    let timeoutId: any; //number | null = null;
     const that = this;
     function handleSearch(): void {
       const searchValue = searchInput.value.trim();
@@ -106,9 +106,24 @@ class PodcastApp {
 
     let target = e.target as Element;
 
+    if (target.matches(".audio-close") || target.closest(".audio-close")) {
+      document
+        .getElementById("audio-player-container")
+        ?.classList.remove("expanded");
+      return;
+    }
+
+    if (target.matches(".player-time") || target.closest(".player-time")) {
+      document
+        .getElementById("audio-player-container")
+        ?.classList.add("expanded");
+      return;
+    }
+
     // Navigation
     if (target.matches("[data-view]") || target.closest("[data-view]")) {
       e.preventDefault();
+      console.log("Setting view...");
       const viewElement = target.closest("[data-view]");
       const view = viewElement!.getAttribute("data-view");
       this.store.setView(view!);
@@ -154,7 +169,8 @@ class PodcastApp {
       const viewElement = target.closest("[data-episode]");
       const ep = viewElement!.getAttribute("data-episode");
       const episode = JSON.parse(ep!);
-      this.store.playEpisode(episode);
+      const { episodes } = this.store.state;
+      this.store.playEpisode(episode, episodes!);
       return;
     }
 
@@ -214,7 +230,7 @@ class PodcastApp {
   handlePodcastClick(podcast: IPodcast) {
     this.store.setCurrentPodcast(podcast);
     if (podcast.feedUrl) {
-      this.store.fetchPodcastDetail(podcast.feedUrl);
+      this.store.fetchPodcastDetail(podcast.feedUrl, podcast.collectionName);
     }
   }
   //
@@ -282,8 +298,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const app = new PodcastApp();
   app.init();
 });
-
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = ` Loading... `;
 
 export const getImageProps = (items: any) => {
   const isPic = (img: string) =>

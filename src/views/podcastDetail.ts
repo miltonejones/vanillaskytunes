@@ -158,7 +158,9 @@ export const renderPodcastDetail = async (state: IState): Promise<string> => {
           </div>
 
           ${
-            trackMemory[item.guid] && trackMemory[item.guid].progress
+            trackMemory[item.guid] &&
+            trackMemory[item.guid].progress &&
+            trackMemory[item.guid].progress < 99
               ? `<div>
               <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                 <div class="progress-bar bg-info" style="width: ${

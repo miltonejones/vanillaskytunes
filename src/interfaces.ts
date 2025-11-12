@@ -12,7 +12,7 @@ export interface IState {
   currentTrackGuid?: string;
   expandedNodes: any;
   currentTrack?: ITrack | null;
-  trackList?: IPodcast[] | null;
+  trackList?: ParsedEpisode[] | null;
   volume?: number;
   currentTime: number;
   duration: number;
@@ -20,7 +20,7 @@ export interface IState {
   detail?: any;
   loading: boolean;
   error?: string | null;
-  bodycss?: string;
+  title?: string;
 }
 
 export interface ITrackMemory {

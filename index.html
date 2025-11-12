@@ -30,138 +30,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <style>
-      body.player-open {
-        /* padding-bottom: 120px; */
-      }
-
-      #audio-player-container {
-        position: fixed;
-        bottom: -200px;
-        left: 0;
-        width: 100%;
-        background: white;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        transition: bottom 0.3s ease;
-        z-index: 1050;
-      }
-
-      body.player-open #audio-player-container {
-        bottom: 40px;
-      }
-
-      .player-controls {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        padding: 0.5rem;
-      }
-
-      .player-track-info {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        min-width: 300px;
-      }
-
-      .player-track-image {
-        width: 72px;
-        height: 72px;
-        border-radius: 5px;
-        object-fit: cover;
-      }
-
-      .player-track-title {
-        font-size: 0.9rem;
-        font-weight: 500;
-        margin: 0;
-        max-width: 250px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .player-buttons {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .player-btn {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #333;
-        transition: color 0.2s;
-        position: relative;
-      }
-
-      .player-btn:hover {
-        color: rgb(25, 118, 210);
-      }
-
-      .player-btn-large {
-        font-size: 2rem;
-      }
-
-      .skip-btn-label {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 0.5rem;
-        font-weight: 700;
-        pointer-events: none;
-      }
-
-      .player-progress {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        min-width: 200px;
-      }
-
-      .player-time {
-        font-size: 0.75rem;
-        color: #666;
-        min-width: 40px;
-        text-align: center;
-      }
-
-      .player-slider {
-        flex: 1;
-        -webkit-appearance: none;
-        appearance: none;
-        height: 4px;
-        background: #ddd;
-        border-radius: 2px;
-        outline: none;
-      }
-
-      .player-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 14px;
-        height: 14px;
-        background: rgb(25, 118, 210);
-        border-radius: 50%;
-        cursor: pointer;
-      }
-
-      .player-slider::-moz-range-thumb {
-        width: 14px;
-        height: 14px;
-        background: rgb(25, 118, 210);
-        border-radius: 50%;
-        cursor: pointer;
-        border: none;
-      }
-    </style>
+    <style></style>
   </head>
   <body class="bg-light">
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast-container position-fixed top-0 end-0 p-3">
       <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <i class="fa-solid fa-podcast"></i>
@@ -174,7 +46,9 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="toast-body">Hello, world! This is a toast message.</div>
+        <div class="toast-body d-flex align-items-center gap-1">
+          Hello, world! This is a toast message.
+        </div>
       </div>
     </div>
 
@@ -204,17 +78,32 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link cursor-pointer" data-view="home">
+              <a
+                class="nav-link cursor-pointer"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                data-view="home"
+              >
                 <i class="fa-solid fa-house"></i> Home
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link cursor-pointer" data-view="categories">
+              <a
+                class="nav-link cursor-pointer"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                data-view="categories"
+              >
                 <i class="fa-solid fa-book"></i> Categories
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link cursor-pointer" data-view="subscriptions">
+              <a
+                class="nav-link cursor-pointer"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                data-view="subscriptions"
+              >
                 <i class="fa-solid fa-bookmark"></i> Subscriptions
                 <span
                   id="subscription-count"
@@ -226,11 +115,6 @@
           </ul>
 
           <form class="d-flex">
-            <div id="loading-spinner" class="text-center">
-              <div class="spinner-border text-danger" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
             <input
               class="form-control me-2"
               type="search"
@@ -248,7 +132,10 @@
     </div>
 
     <footer>
-      STATECAST &copy;
+      <div>
+        <span style="color: rgb(25, 118, 210)">STATE</span><b>CAST</b> &copy;
+      </div>
+
       <div class="desktop">A VanillaTS web application</div>
       <div class="spacer"></div>
       <div>
@@ -268,10 +155,10 @@
       id="offcanvas"
       aria-labelledby="offcanvasLabel"
     >
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" data-display="title" id="offcanvasLabel">
+      <div class="offcanvas-header p-1">
+        <b class="offcanvas-title p-1" data-display="title" id="offcanvasLabel">
           Offcanvas
-        </h5>
+        </b>
         <button
           type="button"
           class="btn-close"
@@ -279,6 +166,7 @@
           aria-label="Close"
         ></button>
       </div>
+
       <div class="offcanvas-body" id="offbody">
         Content for the offcanvas goes here. You can place just about any
         Bootstrap component or custom elements here.
@@ -286,6 +174,20 @@
     </div>
     <!-- Audio Player -->
     <div id="audio-player-container">
+      <button
+        type="button"
+        class="btn-close audio-close"
+        aria-label="Close"
+      ></button>
+
+      <button
+        class="player-btn menu-btn mobile"
+        data-action="show-menu"
+        title="Show playlist"
+      >
+        <i class="fa-solid fa-list-check"></i>
+      </button>
+
       <div class="player-controls">
         <!-- Track Info -->
         <div class="player-track-info">
@@ -306,7 +208,7 @@
         <!-- Playback Controls <i class="fa-solid fa-list-check"></i> -->
         <div class="player-buttons">
           <button
-            class="player-btn"
+            class="player-btn menu-btn"
             data-action="show-menu"
             title="Show playlist"
           >

@@ -79,6 +79,71 @@ npm run build
 
 ---
 
+## 🏁 Testing
+
+Install the required dependencies for testing typescript
+
+```sh
+npm install --save-dev jest ts-jest @types/jest jest-environment-jsdom identity-obj-proxy
+```
+
+Initialize the tsconfig file
+
+```sh
+npx ts-jest config:init
+```
+
+You may have to update the tsconfig.json to accept the new types
+
+```json
+   {
+    ... other types,
+   "types": ["vite/client", "jest", "node"],
+   }
+```
+
+Add an additional tsconfig.test.json file
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": false,
+    "module": "CommonJS",
+    "moduleResolution": "node"
+  },
+  "include": ["src/**/*", "src/__tests__/**/*"]
+}
+```
+
+Update jest.config.js
+
+```js
+import { createDefaultPreset } from "ts-jest";
+
+const tsJestTransformCfg = createDefaultPreset().transform;
+
+/** @type {import("jest").Config} **/
+export default {
+  preset: "ts-jest",
+  testEnvironment: "jsdom",
+  moduleNameMapper: {
+    "\\.(css|less)$": "identity-obj-proxy",
+  },
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.jest.json",
+      },
+    ],
+  },
+};
+```
+
+---
+
 ## 🗂 Project Structure
 
     src/

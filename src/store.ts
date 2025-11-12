@@ -40,7 +40,7 @@ export class PodcastStore implements IStore {
     this.COOKIE_NAME = "rss-subs";
     this.audioElement = new Audio();
     this.parser = new RSSParser();
-    this.toast = new ToastController();
+    this.toast = new ToastController(this);
   }
 
   async initializeApp() {
@@ -114,6 +114,7 @@ export class PodcastStore implements IStore {
   }
 
   setView(view: string) {
+    console.log("setView was called!");
     const updates = {
       view,
       pages: 1,
@@ -146,12 +147,11 @@ export class PodcastStore implements IStore {
     return JSON.parse(val);
   }
 
-  async fetchPodcastDetail(url: string) {
-    this.setState({ loading: true, error: null });
+  async fetchPodcastDetail(url: string, title: string | undefined) {
+    this.setState({ loading: true, error: null, title });
     try {
       console.log("Fetching podcast detail from:", url);
       const response = await this.getPodcast(url);
-      console.log("Podcast detail response type:", typeof response);
 
       this.setState({
         loading: false,
@@ -230,7 +230,6 @@ export class PodcastStore implements IStore {
       isPlaying: false,
       currentTime: 0,
       duration: 0,
-      bodycss: "workspace",
     });
   }
 
@@ -276,7 +275,7 @@ export class PodcastStore implements IStore {
     }
   }
 
-  playEpisode(episode: ParsedEpisode) {
+  playEpisode(episode: ParsedEpisode, trackList: ParsedEpisode[]) {
     if (!episode.enclosure || !episode.enclosure.url) {
       this.setState({ error: "No audio URL available for this episode" });
       return;
@@ -293,7 +292,7 @@ export class PodcastStore implements IStore {
     };
 
     // Use the stored episodes for trackList, or parse from detail if needed
-    let trackList = this.state.episodes;
+    // let trackList = this.state.episodes;
 
     this.setCurrentTrack(track, trackList);
     this.playAudio();
@@ -305,7 +304,7 @@ export class PodcastStore implements IStore {
         (f) => f.guid === this.state.currentTrack?.guid
       ) || 0;
     const nextEp = this.state.episodes?.[index + 1];
-    if (nextEp) this.playEpisode(nextEp);
+    if (nextEp) this.playEpisode(nextEp, this.state.trackList!);
   }
 
   playAudio() {
@@ -314,17 +313,13 @@ export class PodcastStore implements IStore {
       return;
     }
 
-    this.setState({ loading: true });
+    this.setState({ loading: true, title: this.state.currentTrack.title });
 
     this.initAudioElement();
 
     // Set audio source
     this.audioElement.src = this.state.currentTrack.audioUrl;
     this.audioElement.load();
-
-    // Set current volume and playback rate
-    // this.audioElement.volume = this.state.volume;
-    // this.audioElement.playbackRate = this.state.playbackRate;
 
     const trackMemory = JSON.parse(localStorage.getItem("trackMemory") || "{}");
 
@@ -356,7 +351,7 @@ export class PodcastStore implements IStore {
 
   resumeLocal(memory: ITrackMemory) {
     setTimeout(() => {
-      if (memory.guid) {
+      if (memory.guid && memory.progress < 97) {
         const currentTime =
           (Number(memory.progress) / 100) * this.audioElement.duration;
         this.audioElement.currentTime = currentTime;

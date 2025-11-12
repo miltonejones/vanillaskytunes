@@ -6,7 +6,7 @@ export function renderPlaylist(state: IState) {
   let html = "";
   html += '<div class="list-group">';
 
-  state.episodes?.forEach((item: ParsedEpisode) => {
+  state.trackList?.forEach((item: ParsedEpisode) => {
     const isCurrentTrack = state.currentTrack?.guid === item.guid;
     const trackClass = isCurrentTrack ? "bg-primary text-white" : "";
     const safeItemData = JSON.stringify(item).replace(/'/g, "&apos;");
@@ -37,15 +37,6 @@ export function renderPlaylist(state: IState) {
       </div> `;
   });
 
-  //   html += state.episodes
-  //     ?.map(
-  //       (f: ParsedEpisode) => `
-  //     <div class="list-group-item d-flex gap-3 align-items-start" >
-  //         ${f.title}
-  //     </div>
-  //     `
-  //     )
-  //     .join("");
   html += "</div>";
 
   body!.innerHTML = html;
