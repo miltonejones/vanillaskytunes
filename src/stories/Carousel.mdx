@@ -1,0 +1,95 @@
+import {
+  Meta,
+  Canvas,
+  Story,
+  Subtitle,
+  Description,
+  Controls,
+} from "@storybook/addon-docs/blocks";
+import * as CarouselStories from "./carousel.stories";
+
+<Meta of={CarouselStories} />
+
+# PodcastCarousel
+
+<Subtitle>
+  A horizontally scrollable carousel of podcast cards with optional auto-play.
+</Subtitle>
+
+<Description>
+The **PodcastCarousel** renders a row of podcast cards and lets users navigate
+through them using next/previous controls. It can also auto-advance after a
+configurable delay.
+
+These stories use a mocked store and a `PodcastCarouselController` under the
+hood so you can focus on visual behavior and interaction rather than wiring up
+a real data source.
+
+</Description>
+
+## Usage
+
+```ts
+// Example args
+{
+  podcasts: [
+    {
+      id: "episode-1",
+      title: "First Episode",
+      description: "Introduction to the show",
+      // ...other IPodcast fields
+    },
+  ],
+  autoPlayDelay: 6000, // ms between automatic transitions
+}
+```
+
+---
+
+## Default
+
+Single podcast in the carousel.
+
+<Canvas>
+  <Story of={CarouselStories.Default} />
+</Canvas>
+
+---
+
+## Multiple podcasts
+
+Carousel with several items and default auto-play timing.
+
+<Canvas>
+  <Story of={CarouselStories.MultiplePodcasts} />
+</Canvas>
+
+---
+
+## Long titles
+
+Use this story to verify how long podcast titles wrap or truncate.
+
+<Canvas>
+  <Story of={CarouselStories.WithLongTitle} />
+</Canvas>
+
+---
+
+## Fast auto-play
+
+Demonstrates the animation behavior when the carousel advances quickly.
+
+<Canvas>
+  <Story of={CarouselStories.FastAutoPlay} />
+</Canvas>
+
+---
+
+## Many podcasts
+
+Larger dataset to show how the carousel behaves with many items in the list.
+
+<Canvas>
+  <Story of={CarouselStories.ManyPodcasts} />
+</Canvas>

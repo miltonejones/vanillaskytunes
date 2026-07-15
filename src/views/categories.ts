@@ -1,7 +1,10 @@
 import type { IState } from "../interfaces";
 import { renderPodcastCard } from "./podcastCard";
 
-export function renderCategories(state: IState) {
+export function renderCategories(state: Partial<IState>) {
+  if (!state.podcasts) {
+    return "";
+  }
   if (state.podcasts.length === 0) {
     return `
           <div class="text-center py-5">
@@ -32,6 +35,4 @@ export function renderCategories(state: IState) {
       `;
     })
     .join("");
-
-  // return `<pre>${JSON.stringify(groups, null, 2)}</pre>`;
 }

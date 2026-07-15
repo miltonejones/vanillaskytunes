@@ -256,9 +256,9 @@ body.player-open .workspace {
   }
 
   body.player-open #audio-player-container.expanded {
-    bottom: 40px;
+    bottom: 35px;
     top: 0;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 35px);
   }
 
   .player-track-info,
@@ -408,8 +408,13 @@ footer {
   color: white;
   padding: 0.5rem;
   gap: 1rem;
+  font-size: 0.8rem;
 }
 
 .spacer {
   flex-grow: 1;
+}
+
+.progress {
+  height: 0.4rem;
 }

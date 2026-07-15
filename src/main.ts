@@ -1,6 +1,6 @@
 import "./player.css";
 import "./style.css";
-import type { IPodcast, IState } from "./interfaces";
+import type { IPodcast, IState, ParsedEpisode } from "./interfaces";
 
 import {
   renderHome,
@@ -12,6 +12,8 @@ import {
 import { PodcastCarouselController } from "./controllers/carousel";
 import { AudioPlayer } from "./controllers/audioPlayer";
 import { PodcastStore } from "./store";
+import { createNavigationBar } from "./components/nav";
+import { sortTrackList } from "./util/sortTrackList";
 
 export class PodcastApp {
   store;
@@ -19,6 +21,8 @@ export class PodcastApp {
   eventsBound = false;
   carousel;
   player;
+  storyLink: string =
+    "https://69229e4b00385d7c3ff506e3-fkgycpfwop.chromatic.com";
   constructor() {
     this.store = new PodcastStore(); // window.podcastStore;
     this.carousel = new PodcastCarouselController(this.store);
@@ -33,11 +37,23 @@ export class PodcastApp {
     }
   }
 
+  updateStoryLink() {
+    const linkElement = document.querySelector(
+      ".storybook-link"
+    ) as HTMLAnchorElement;
+    if (linkElement) {
+      linkElement.href = this.storyLink;
+    }
+  }
+
   async initializeApp() {
     if (this.store) {
       this.store.subscribe((state: IState) => {
         this.render(state);
       });
+
+      this.renderNav();
+      this.updateStoryLink();
 
       await this.store.initializeApp();
       this.initialized = true;
@@ -48,6 +64,13 @@ export class PodcastApp {
     }
 
     alert("No store");
+  }
+
+  renderNav() {
+    const navContainer = document.getElementById("nav");
+    if (navContainer) {
+      navContainer.innerHTML = createNavigationBar();
+    }
   }
 
   bindEvents() {
@@ -120,7 +143,21 @@ export class PodcastApp {
       return;
     }
 
-    // Navigation
+    // Navigation data-sort-field
+    if (
+      target.matches("[data-sort-field]") ||
+      target.closest("[data-sort-field]")
+    ) {
+      e.preventDefault();
+      const viewElement = target.closest("[data-sort-field]");
+      const field = viewElement!.getAttribute("data-sort-field");
+      this.store.setState({
+        sortField: field!,
+        ascOffset: this.store.state.ascOffset! * -1,
+      });
+      return;
+    }
+
     if (target.matches("[data-view]") || target.closest("[data-view]")) {
       e.preventDefault();
       console.log("Setting view...");
@@ -142,25 +179,7 @@ export class PodcastApp {
       e.preventDefault();
       const viewElement = target.closest("[data-action]");
       const action = viewElement!.getAttribute("data-action");
-      switch (action) {
-        case "play-pause":
-          this.store.togglePlayPause();
-          break;
-        case "skip-back":
-          this.store.skipForward(-30);
-          break;
-        case "skip-forward":
-          this.store.skipForward(30);
-          break;
-        case "show-menu":
-          document.getElementById("offcanvas")?.classList.toggle("show");
-          break;
-        case "close":
-          this.store.stopAudio();
-          break;
-        default:
-        // do nothing
-      }
+      this.store.handleClickAction(action!);
       return;
     }
 
@@ -170,7 +189,15 @@ export class PodcastApp {
       const ep = viewElement!.getAttribute("data-episode");
       const episode = JSON.parse(ep!);
       const { episodes } = this.store.state;
-      this.store.playEpisode(episode, episodes!);
+
+      const sortedList: ParsedEpisode[] | undefined = sortTrackList(
+        this.store.state as IState,
+        episodes!
+      );
+
+      console.log({ sortedList });
+
+      this.store.playEpisode(episode, sortedList!);
       return;
     }
 
@@ -235,6 +262,7 @@ export class PodcastApp {
   }
   //
   async render(state: IState) {
+    console.log("Rendering app with state:", state);
     const spinner = document.querySelector<HTMLDivElement>("#loading-spinner");
     state.loading
       ? spinner?.classList.remove("d-none")
@@ -254,7 +282,7 @@ export class PodcastApp {
         content = renderSubscriptions(state);
         break;
       case "detail":
-        content = await renderPodcastDetail(state);
+        content = renderPodcastDetail(state);
         break;
       default:
         content = renderHome(state);

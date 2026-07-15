@@ -1,0 +1,78 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  Primary,
+  Stories,
+  Controls,
+} from "@storybook/addon-docs/blocks";
+import * as PodcastDetailRowStories from "./PodcastDetailRow.stories";
+
+<Meta of={PodcastDetailRowStories} />
+
+# PodcastDetailRow
+
+The PodcastDetailRow component displays a podcast episode in a list format, showing key information about the episode and its playback state. This component is used within the podcast detail view to present individual episodes with interactive elements for playing and expanding episode details.
+
+## Features
+
+- Displays episode title, description, and metadata
+- Shows visual indicator for currently playing episode
+- Indicates playback progress and completion status
+- Supports expandable/collapsible episode details
+- Integrates with track memory to persist playback state
+- Responsive styling with active state highlighting
+
+## Props
+
+<Controls />
+
+### Prop Details
+
+- **currentTrack**: The track object representing the currently playing episode. Used to determine if this row should display as active.
+- **item**: A ParsedEpisode object containing the episode data including guid, title, description, and other metadata.
+- **expandedNodes**: An optional object mapping episode guids to boolean values indicating whether each episode's details are expanded.
+
+## Usage
+
+The PodcastDetailRow component is typically used within a list of podcast episodes. It automatically handles:
+
+- Visual differentiation of the active/playing episode with highlighted background
+- Display of completion status based on playback progress stored in localStorage
+- Toggle state for expanded episode details
+- Proper encoding of episode data for DOM safety
+
+```javascript
+const props = {
+  currentTrack: currentPlayingTrack,
+  item: episodeData,
+  expandedNodes: { [episodeGuid]: true },
+};
+```
+
+## Default View
+
+The default view shows a standard podcast episode row in its collapsed state, not currently playing.
+
+<Primary />
+
+## Stories
+
+### Active
+
+Shows the component when the episode is currently playing, with highlighted styling.
+
+### Expanded
+
+Demonstrates the expanded state where additional episode details are visible.
+
+## All Stories
+
+<Stories />
+
+## Notes
+
+- The component relies on `trackMemory` stored in localStorage to track playback progress
+- Episodes with progress > 98% are marked as finished
+- Episode data is sanitized before rendering to prevent XSS vulnerabilities
+- The component uses Bootstrap's list-group styling conventions

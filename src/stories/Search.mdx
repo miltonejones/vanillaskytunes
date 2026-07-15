@@ -1,0 +1,92 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  Primary,
+  Stories,
+  Controls,
+} from "@storybook/addon-docs/blocks";
+import * as SearchStories from "./Search.stories";
+
+<Meta of={SearchStories} />
+
+# Search
+
+The Search component provides a podcast discovery interface where users can search for and browse new podcasts to subscribe to. This view displays search results in an organized layout and handles both empty and populated search states.
+
+## Features
+
+- Displays podcast search results in a structured list format
+- Handles empty state when no search has been performed
+- Shows search results with podcast metadata and artwork
+- Integrates with navigation bar for view switching
+- Responsive layout that adapts to different screen sizes
+- Maintains active state awareness for navigation highlighting
+- Supports footer integration for complete page layout
+
+## Props
+
+<Controls />
+
+### Prop Details
+
+- **state**: A partial IState object containing:
+  - **view**: The current view identifier (typically "search") used for navigation state
+  - **results**: Array of search result objects containing podcast information from the search API, including title, description, artwork, feed URL, and other metadata
+
+## Usage
+
+The Search component is rendered as a full-page layout view when users navigate to the search interface. It displays search results dynamically based on user queries:
+
+```javascript
+// Empty search state
+const emptyState = {
+  view: "search",
+  results: [],
+};
+
+// With search results
+const populatedState = {
+  view: "search",
+  results: searchResultsFromAPI,
+};
+
+renderSearch(state);
+```
+
+The component automatically:
+
+- Renders the navigation bar with proper active state
+- Displays search results when available
+- Shows appropriate empty state messaging when no results exist
+- Handles responsive layout within the workspace container
+- Integrates with the application footer
+
+## Default View
+
+The default view shows the search interface in its initial empty state, ready to display results when a search is performed.
+
+<Primary />
+
+## Stories
+
+### Default
+
+Demonstrates the search view with no results, showing the initial/empty state of the search interface.
+
+### WithResults
+
+Shows the search view populated with podcast search results, demonstrating how the component renders discovered podcasts with full metadata.
+
+## All Stories
+
+<Stories />
+
+## Notes
+
+- The component uses a `workspace` container with Bootstrap styling for consistent layout
+- Navigation links are automatically highlighted based on the current view state
+- Search results are expected to come from an external podcast search API
+- The empty state provides a clean starting point for users to initiate searches
+- This is a layout-level component that composes multiple smaller components (navigation, footer)
+- Result data should include all necessary podcast metadata for proper rendering and subscription actions

@@ -1,0 +1,219 @@
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as PodcastCardStories from "./podcastCard.stories";
+
+<Meta of={PodcastCardStories} />
+
+# PodcastCard
+
+The PodcastCard component displays a podcast with its artwork, title, and subscription status. It includes interactive features like subscription toggling and progress tracking for in-progress episodes.
+
+## Features
+
+- **Podcast Artwork**: Displays podcast cover image
+- **Title Display**: Shows podcast name with text truncation for long titles
+- **Subscription Toggle**: Star icon to subscribe/unsubscribe
+- **Progress Tracking**: Visual progress bar for episodes in progress
+- **Interactive Actions**: Click to view podcast details
+- **Responsive Layout**: Adapts to grid layouts and different screen sizes
+- **State Persistence**: Tracks subscription status and playback progress
+
+## Component States
+
+### Default Card
+
+A standard podcast card showing basic information without subscription or progress.
+
+<Canvas of={PodcastCardStories.Default} />
+<Controls of={PodcastCardStories.Default} />
+
+---
+
+### Subscribed State
+
+Podcast card showing subscribed state with a filled star icon and "Unsubscribe" text. The subscription status is visually distinct.
+
+<Canvas of={PodcastCardStories.Subscribed} />
+
+---
+
+### With Progress
+
+Podcast card displaying a progress bar when an episode is in progress (less than 99% complete). Shows visual feedback for ongoing playback.
+
+<Canvas of={PodcastCardStories.WithProgress} />
+
+---
+
+### Long Title
+
+Demonstrates text truncation handling for podcasts with very long titles. Title is truncated with ellipsis to fit the card layout.
+
+<Canvas of={PodcastCardStories.LongTitle} />
+
+---
+
+### Grid Layout
+
+Multiple podcast cards arranged in a responsive grid layout, demonstrating how they work together in a collection view.
+
+<Canvas of={PodcastCardStories.GridLayout} />
+
+---
+
+## Usage
+
+```typescript
+import { renderPodcastCard } from "../views";
+
+// Create state with subscriptions
+const state: Partial<IState> = {
+  subscriptions: [subscribedPodcast],
+  // ... other state properties
+};
+
+// Render a single podcast card
+const cardHTML = renderPodcastCard(podcast, state);
+
+// Insert into DOM
+container.innerHTML = cardHTML;
+
+// Render multiple cards in a grid
+const gridHTML = `
+  <div class="container-fluid">
+    <div class="row">
+      ${podcasts.map((p) => renderPodcastCard(p, state)).join("")}
+    </div>
+  </div>
+`;
+```
+
+## State Management
+
+The PodcastCard component uses the following state:
+
+- **subscriptions**: Array of subscribed podcasts for displaying subscription status
+- **trackMemory**: localStorage data for showing progress bars
+
+## Podcast Data Structure
+
+```typescript
+interface IPodcast {
+  trackId: number; // Unique identifier
+  collectionId: number; // Podcast collection ID
+  trackName: string; // Podcast title
+  artistName: string; // Podcast author/artist
+  feedUrl: string; // RSS feed URL
+  artworkUrl100: string; // Artwork image (100x100)
+  artworkUrl600?: string; // High-res artwork (600x600)
+  collectionName: string; // Collection name
+  // ... other metadata
+}
+```
+
+## Progress Tracking
+
+Progress is stored in localStorage under the `trackMemory` key:
+
+```typescript
+{
+  trackMemory: {
+    [episodeId: string]: {
+      guid: string;          // Podcast feed URL
+      progress: number;      // Percentage (0-100)
+      duration: number;      // Total duration in seconds
+      currentTime: number;   // Current position in seconds
+    }
+  }
+}
+```
+
+Progress bar displays when:
+
+- Episode progress exists in trackMemory
+- Progress is less than 99% (not completed)
+- The podcast's feedUrl matches the episode's guid
+
+## Visual Elements
+
+### Card Structure
+
+- **Artwork**: Podcast cover image (typically 100x100px)
+- **Title**: Podcast name with ellipsis for overflow
+- **Star Icon**: Subscription toggle (outlined/filled)
+- **Progress Bar**: Horizontal bar showing playback progress
+
+### Subscription States
+
+- **Not Subscribed**: Outlined star icon, "Subscribe" text
+- **Subscribed**: Filled star icon, "Unsubscribe" text
+
+### Progress Bar
+
+- **Color**: Typically blue or accent color
+- **Width**: Percentage-based (0-100%)
+- **Position**: Bottom of card or below title
+- **Visibility**: Only shown when progress exists and < 99%
+
+## Grid Layout
+
+Cards work seamlessly in Bootstrap grid layouts:
+
+```html
+<div class="container-fluid">
+  <div class="row">
+    <!-- Each card typically uses col-md-3 or col-lg-2 -->
+    <div class="col-md-3">[Podcast Card]</div>
+  </div>
+</div>
+```
+
+## Interactive Behavior
+
+### Click Actions
+
+- **Card Click**: Navigate to podcast detail page
+- **Star Icon Click**: Toggle subscription status
+- **Progress Bar**: Visual only, not interactive
+
+### Hover States
+
+- Card elevation or shadow effect
+- Star icon color change
+- Cursor pointer indication
+
+## Integration Notes
+
+- Renders as pure HTML string for insertion into DOM
+- Uses Bootstrap grid classes for responsive layout
+- Integrates with subscription management system
+- Reads from localStorage for progress tracking
+- Event handlers should be attached after rendering
+- Supports both artwork URL sizes (100x100 and 600x600)
+
+## Styling
+
+The podcast card uses:
+
+- Bootstrap card component classes
+- Responsive column classes (col-md-3, col-lg-2, etc.)
+- Custom progress bar styling
+- Text truncation for long titles
+- Image aspect ratio maintenance
+- Consistent spacing and padding
+
+## Accessibility
+
+- **Alt Text**: Artwork images include descriptive alt text
+- **ARIA Labels**: Subscription buttons have proper labels
+- **Semantic HTML**: Uses appropriate heading and button elements
+- **Keyboard Navigation**: All interactive elements are keyboard accessible
+- **Focus Indicators**: Clear visual focus states
+- **Screen Reader Support**: Progress information announced properly
+
+## Use Cases
+
+**Browse Podcasts**: Display available podcasts in a searchable grid
+**Subscription Management**: Quick subscribe/unsubscribe actions
+**Progress Indication**: Show which podcasts have in-progress episodes
+**Discovery**: Visual browsing of podcast artwork and titles
+**Collections**: Organize podcasts in curated lists or categories

@@ -21,6 +21,8 @@ export interface IState {
   loading: boolean;
   error?: string | null;
   title?: string;
+  sortField?: string;
+  ascOffset?: number;
 }
 
 export interface ITrackMemory {

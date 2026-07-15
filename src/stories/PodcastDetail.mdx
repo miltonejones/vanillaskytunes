@@ -1,0 +1,57 @@
+import {
+  Meta,
+  Canvas,
+  Story,
+  Subtitle,
+  Description,
+} from "@storybook/addon-docs/blocks";
+import * as PodcastDetailStories from "./podcastDetail.stories";
+
+<Meta of={PodcastDetailStories} />
+
+# PodcastDetail
+
+<Subtitle>
+  A detailed view of a single podcast episode, including artwork, metadata, and
+  actions.
+</Subtitle>
+
+<Description>
+The **PodcastDetail** component displays rich information about a single
+podcast episode or show. It typically includes cover artwork, title, show
+name, publish date, duration, description, and any primary actions such as
+“Play”, “Resume”, or “Add to Queue”.
+
+This MDX file wires up the stories from `podcastDetail.stories.ts` to a docs
+page so you can see the component, its props, and interactively tweak them via
+Storybook controls.
+
+</Description>
+
+## Usage
+
+```tsx
+import { PodcastDetail } from "./PodcastDetail";
+
+export function Example() {
+  return (
+    <PodcastDetail
+      id="episode-1"
+      title="Welcome to the Show"
+      showName="My Favorite Podcast"
+      description="In this episode we introduce the show and talk about what’s coming next."
+      imageUrl="https://example.com/artwork.jpg"
+      publishedAt="2025-01-01T12:00:00Z"
+      durationSeconds={1800}
+    />
+  );
+}
+```
+
+## Default
+
+The base rendering of **PodcastDetail** with standard episode data.
+
+<Canvas>
+  <Story of={PodcastDetailStories.Default} />
+</Canvas>

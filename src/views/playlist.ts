@@ -1,8 +1,7 @@
 import type { IState, ParsedEpisode } from "../interfaces";
 import { formatDuration } from "../util";
 
-export function renderPlaylist(state: IState) {
-  const body = document.getElementById("offbody");
+export function renderPlaylist(state: Partial<IState>): string {
   let html = "";
   html += '<div class="list-group">';
 
@@ -38,9 +37,5 @@ export function renderPlaylist(state: IState) {
   });
 
   html += "</div>";
-
-  body!.innerHTML = html;
-
-  const titleEl = document.querySelector("[data-display='title']");
-  if (titleEl) titleEl.textContent = state.currentPodcast?.collectionName || "";
+  return html;
 }

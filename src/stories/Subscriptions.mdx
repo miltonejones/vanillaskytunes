@@ -1,0 +1,48 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  Primary,
+  Stories,
+  Controls,
+} from "@storybook/addon-docs/blocks";
+import * as SubscriptionStories from "./Subscriptions.stories";
+
+<Meta of={SubscriptionStories} />
+
+# Subscriptions
+
+The Subscriptions component displays a list of user subscriptions with optional limiting functionality.
+
+## Props
+
+{" "}
+
+<Controls />
+
+## Default View
+
+The default view shows subscriptions with the limit flag enabled.
+
+<Primary />
+
+## All stories
+
+<Stories />
+
+## Usage
+
+```typescript
+import { renderSubscriptions } from "../views";
+
+const state = {
+  view: "dash",
+  subscriptions: subscriptions,
+};
+
+// With limit
+renderSubscriptions(state, true);
+
+// Without limit
+renderSubscriptions(state, false);
+```

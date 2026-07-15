@@ -24,7 +24,8 @@ export class PodcastStore implements IStore {
   parser: RSSParser;
   toast: ToastController;
 
-  constructor() {
+  private STATE_COOKIE_NAME = "code_rss_session";
+  constructor(initialState: Partial<IState> = {}) {
     this.state = {
       ready: false,
       podcasts: [],
@@ -35,14 +36,45 @@ export class PodcastStore implements IStore {
       currentTime: 0,
       duration: 0,
       loading: false,
+      ...initialState,
+      sortField: "title",
+      ascOffset: 1,
     };
     this.listeners = [];
     this.COOKIE_NAME = "rss-subs";
+    this.reloadState();
     this.audioElement = new Audio();
     this.parser = new RSSParser();
     this.toast = new ToastController(this);
   }
 
+  reloadState() {
+    try {
+      const savedState = localStorage.getItem(this.STATE_COOKIE_NAME);
+      if (savedState) {
+        const parsedState = JSON.parse(savedState);
+        console.log("Reloaded state:", parsedState);
+        this.setState(parsedState);
+      }
+    } catch (error) {
+      console.error("Error loading state:", error);
+    }
+  }
+
+  persistState() {
+    const stateToPersist = {
+      ...this.state,
+    };
+    try {
+      console.log("Persisting state:", stateToPersist);
+      localStorage.setItem(
+        this.STATE_COOKIE_NAME,
+        JSON.stringify(stateToPersist)
+      );
+    } catch (error) {
+      console.error("Error persisting state:", error);
+    }
+  }
   async initializeApp() {
     this.loadSubscriptions();
     const res: IPodcastResponse = await getPodcasts("popular");
@@ -106,6 +138,7 @@ export class PodcastStore implements IStore {
 
   notify() {
     this.listeners.forEach((listener) => listener(this.state));
+    this.persistState();
   }
 
   setState(updates: Partial<IState>) {
@@ -275,6 +308,28 @@ export class PodcastStore implements IStore {
     }
   }
 
+  handleClickAction(action: string) {
+    switch (action) {
+      case "play-pause":
+        this.togglePlayPause();
+        break;
+      case "skip-back":
+        this.skipForward(-30);
+        break;
+      case "skip-forward":
+        this.skipForward(30);
+        break;
+      case "show-menu":
+        document.getElementById("offcanvas")?.classList.toggle("show");
+        break;
+      case "close":
+        this.stopAudio();
+        break;
+      default:
+        console.warn("Unknown action:", action);
+    }
+  }
+
   playEpisode(episode: ParsedEpisode, trackList: ParsedEpisode[]) {
     if (!episode.enclosure || !episode.enclosure.url) {
       this.setState({ error: "No audio URL available for this episode" });
@@ -300,10 +355,10 @@ export class PodcastStore implements IStore {
 
   playNextTrack() {
     const index =
-      this.state.episodes?.findIndex(
+      this.state.trackList?.findIndex(
         (f) => f.guid === this.state.currentTrack?.guid
       ) || 0;
-    const nextEp = this.state.episodes?.[index + 1];
+    const nextEp = this.state.trackList?.[index + 1];
     if (nextEp) this.playEpisode(nextEp, this.state.trackList!);
   }
 

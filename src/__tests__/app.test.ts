@@ -15,6 +15,7 @@ describe("PodcastApp", () => {
   beforeEach(() => {
     app = new PodcastApp();
     jest.spyOn(app.store, "setView");
+    jest.spyOn(app.store, "seekTo");
   });
 
   afterEach(() => {
@@ -25,6 +26,20 @@ describe("PodcastApp", () => {
     expect(app).toBeDefined();
     expect(app.initialized).toBe(false);
     expect(app.store).toBeInstanceOf(PodcastStore);
+  });
+
+  test("should handle progress events", () => {
+    const target = document.createElement("input") as HTMLInputElement;
+    target.dataset.control = "progress";
+    target.value = "55";
+    const mockEvent = {
+      preventDefault: jest.fn(),
+      target,
+    } as unknown as Event;
+
+    app.handleInput(mockEvent);
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
+    expect(app.store.seekTo).toHaveBeenCalled();
   });
 
   test("should handle click events", () => {

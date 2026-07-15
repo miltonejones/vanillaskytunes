@@ -1,0 +1,169 @@
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as AudioPlayerStories from "./audioPlayer.stories";
+
+<Meta of={AudioPlayerStories} />
+
+# AudioPlayer
+
+The AudioPlayer component provides a comprehensive audio playback interface for podcast episodes. It includes playback controls, progress tracking, playlist management, and persistent state storage via localStorage.
+
+## Features
+
+- **Playback Controls**: Play, pause, seek, and skip functionality
+- **Progress Tracking**: Visual progress bar with time display
+- **Playlist Support**: Queue management with next/previous navigation
+- **State Persistence**: Automatically saves playback position and resumes on reload
+- **Responsive Design**: Adapts to different screen sizes
+- **Event Handling**: Comprehensive event system for all player interactions
+
+## Component States
+
+### Default State
+
+The audio player in its initial state with no track loaded.
+
+<Canvas of={AudioPlayerStories.Default} />
+<Controls of={AudioPlayerStories.Default} />
+
+---
+
+### With Current Track
+
+Audio player with a track loaded but not currently playing. Shows track information and artwork.
+
+<Canvas of={AudioPlayerStories.WithCurrentTrack} />
+
+---
+
+### Playing
+
+Active playback state with progress indicator and real-time updates.
+
+<Canvas of={AudioPlayerStories.Playing} />
+
+---
+
+### With Playlist
+
+Full player experience including the playlist sidebar showing queued episodes.
+
+<Canvas of={AudioPlayerStories.WithPlaylist} />
+
+---
+
+### Near Completion
+
+Player state when a track is almost finished, demonstrating progress tracking near the end.
+
+<Canvas of={AudioPlayerStories.NearCompletion} />
+
+---
+
+### With Artwork
+
+Displays podcast artwork when available, enhancing the visual experience.
+
+<Canvas of={AudioPlayerStories.WithArtwork} />
+
+---
+
+## Interactive Demos
+
+### Progress Tracking
+
+This demo shows how the audio player tracks progress and saves it to localStorage for resume functionality.
+
+<Canvas of={AudioPlayerStories.ProgressTracking} />
+
+The player automatically saves:
+
+- Current playback position
+- Track duration
+- Progress percentage
+- Track GUID for identification
+
+---
+
+### Player Events
+
+Interactive demo to test various audio player events and their effects. Use the buttons to simulate different player interactions.
+
+<Canvas of={AudioPlayerStories.PlayerEvents} />
+
+Available events:
+
+- **Play**: Starts or resumes playback
+- **Pause**: Pauses playback
+- **Seek**: Jumps to a specific position
+- **Metadata Load**: Processes track duration and metadata
+
+---
+
+## Usage
+
+```typescript
+import { AudioPlayer } from "../controllers/audioPlayer";
+import { PodcastStore } from "../store";
+
+// Initialize the store with your state
+const store = new PodcastStore(initialState);
+
+// Create the audio player instance
+const audioPlayer = new AudioPlayer(store);
+
+// Render the player
+audioPlayer.render(store.getState());
+
+// Play an episode
+store.playEpisode(episode, playlist);
+```
+
+## State Management
+
+The AudioPlayer integrates with the PodcastStore to manage:
+
+- **currentTrack**: The episode currently loaded in the player
+- **currentPodcast**: Metadata about the podcast
+- **isPlaying**: Boolean indicating playback state
+- **trackList**: Array of episodes in the playlist
+- **trackMemory**: localStorage persistence for resume functionality
+
+## LocalStorage Schema
+
+```typescript
+{
+  trackMemory: {
+    [trackId: string]: {
+      progress: number;      // Percentage (0-100)
+      guid: string;          // Episode identifier
+      duration: number;      // Total duration in seconds
+      currentTime: number;   // Current position in seconds
+    }
+  }
+}
+```
+
+## Integration Notes
+
+- The audio player automatically attaches to the `#offbody` container
+- Uses native HTML5 `<audio>` element for playback
+- Emits state updates through the store's subscription system
+- Handles browser visibility changes to pause/resume appropriately
+- Responsive design adapts to mobile and desktop layouts
+
+## Accessibility
+
+- Keyboard navigation support
+- ARIA labels for screen readers
+- Visual focus indicators
+- Semantic HTML structure
+- Time displays in human-readable format
+
+## Browser Support
+
+The AudioPlayer requires:
+
+- HTML5 audio element support
+- localStorage API
+- Modern JavaScript features (ES6+)
+- CSS Grid and Flexbox support

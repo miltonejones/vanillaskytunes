@@ -110,15 +110,20 @@ export class PodcastCarouselController {
     this.isInitialized = true;
   }
 
-  render(state: IState) {
+  render(state: Partial<IState>): void {
     const extra = document.querySelector<HTMLDivElement>("#extra");
 
-    if (state.view === "home" && state.podcasts.length > 0) {
+    if (state.view === "home" && state.podcasts && state.podcasts.length > 0) {
       // Reset current index when returning to home
       this.currentIndex = 0;
 
       const htm = createPodcastCarousel(state.podcasts);
-      extra!.innerHTML = htm;
+      if (extra) {
+        extra.innerHTML = htm;
+      } else {
+        console.warn("Extra container not found for carousel");
+        return alert("Carousel container not found");
+      }
 
       // Add event listeners for arrows
       this.attachEventListeners();
@@ -161,8 +166,9 @@ export class PodcastCarouselController {
     }
   }
 
-  nextSlide(state: IState): void {
-    if (state.podcasts.length <= 1 || this.isAnimating) return;
+  nextSlide(state: Partial<IState>): void {
+    if ((state.podcasts && state.podcasts.length <= 1) || this.isAnimating)
+      return;
     this.isAnimating = true;
 
     const carousel = document.querySelector(".podcast-carousel-container");
@@ -176,6 +182,9 @@ export class PodcastCarouselController {
 
     if (!currentSlide || !wrapper) {
       this.isAnimating = false;
+      return;
+    }
+    if (!state.podcasts) {
       return;
     }
 
@@ -308,7 +317,8 @@ export class PodcastCarouselController {
     }, 500); // Match CSS transition duration
   }
 
-  private startAutoPlay(state: IState): void {
+  private startAutoPlay(state: Partial<IState>): void {
+    if (!state.podcasts) return;
     if (state.podcasts.length <= 1) return;
 
     // Clear any existing interval first
@@ -319,7 +329,7 @@ export class PodcastCarouselController {
     }, this.autoPlayDelay);
   }
 
-  private restartAutoPlay(state: IState): void {
+  private restartAutoPlay(state: Partial<IState>): void {
     this.clearAutoPlay();
     this.startAutoPlay(state);
   }

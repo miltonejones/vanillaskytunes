@@ -1,8 +1,11 @@
 import type { IState } from "../interfaces";
 import { renderPodcastCard } from "./podcastCard";
 
-export function renderSubscriptions(state: IState, limit: boolean = false) {
-  if (state.subscriptions.length === 0) {
+export function renderSubscriptions(
+  state: Partial<IState>,
+  limit: boolean = false
+) {
+  if (state.subscriptions?.length === 0) {
     return `
               <div class="text-center py-5">
                   <h3>No subscriptions yet</h3>
@@ -11,11 +14,11 @@ export function renderSubscriptions(state: IState, limit: boolean = false) {
           `;
   }
 
-  if (limit) {
+  if (limit && state.subscriptions) {
     return `
   <div class="row">
       <div class="col-12 d-flex justify-content-between mb-2">
-          <h4>${state.subscriptions.length} Subscriptions</h4>
+          <h4>${state.subscriptions?.length} Subscriptions</h4>
           <button  class="btn btn-light btn-sm" data-view="subscriptions">View all <i class="fa-solid fa-arrow-right"></i></button>
       </div>
       ${state.subscriptions
@@ -32,7 +35,7 @@ export function renderSubscriptions(state: IState, limit: boolean = false) {
                   <h2 class="mb-4">My Subscriptions</h2>
               </div>
               ${state.subscriptions
-                .map((podcast) => renderPodcastCard(podcast, state))
+                ?.map((podcast) => renderPodcastCard(podcast, state))
                 .join("")}
           </div>
       `;

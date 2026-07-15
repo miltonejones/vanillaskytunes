@@ -1,0 +1,153 @@
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as PlaylistStories from "./playlist.stories";
+
+<Meta of={PlaylistStories} />
+
+# Playlist
+
+The Playlist component displays a list of podcast episodes in a queue, allowing users to view upcoming tracks and navigate between them. It provides visual feedback for the currently playing track and handles text truncation for long episode titles.
+
+## Features
+
+- **Episode Queue Display**: Shows a list of queued podcast episodes
+- **Current Track Highlighting**: Visually distinguishes the currently playing episode
+- **Text Truncation**: Automatically truncates long episode titles for better readability
+- **Duration Display**: Shows episode length for each track
+- **Interactive Navigation**: Click episodes to play them
+- **Empty State Handling**: Gracefully displays when no episodes are queued
+
+## Component States
+
+### Default Playlist
+
+A standard playlist view showing multiple episodes with titles and durations.
+
+<Canvas of={PlaylistStories.Default} />
+<Controls of={PlaylistStories.Default} />
+
+---
+
+### With Current Track
+
+Playlist highlighting the currently playing track with distinct styling. The active track is emphasized with different background and text colors.
+
+<Canvas of={PlaylistStories.WithCurrentTrack} />
+
+---
+
+### Empty Playlist
+
+The playlist view when no episodes are queued. Shows an empty state.
+
+<Canvas of={PlaylistStories.EmptyPlaylist} />
+
+---
+
+### Single Episode
+
+Playlist with only one episode, showing the current track highlighted.
+
+<Canvas of={PlaylistStories.SingleEpisode} />
+
+---
+
+### Long Titles
+
+Demonstrates how the playlist handles episodes with very long titles through text truncation and ellipsis.
+
+<Canvas of={PlaylistStories.LongTitles} />
+
+---
+
+## Usage
+
+```typescript
+import { renderPlaylist } from "../views/playlist";
+
+// Create state with track list
+const state: Partial<IState> = {
+  trackList: episodes,
+  currentTrack: currentEpisode,
+};
+
+// Render the playlist
+const playlistHTML = renderPlaylist(state);
+
+// Insert into DOM
+container.innerHTML = playlistHTML;
+```
+
+## State Management
+
+The Playlist component uses the following state properties:
+
+- **trackList**: Array of `ParsedEpisode` objects to display in the queue
+- **currentTrack**: The episode currently playing (highlighted in the list)
+
+## Episode Data Structure
+
+Each episode in the playlist requires:
+
+```typescript
+interface ParsedEpisode {
+  guid: string; // Unique identifier
+  title: string; // Episode title
+  duration?: number; // Duration in seconds
+  // ... other episode metadata
+}
+```
+
+## Visual Behavior
+
+### Current Track Styling
+
+- **Background Color**: Distinct background to highlight active track
+- **Text Color**: Different text color for emphasis
+- **Visual Hierarchy**: Clear distinction from other episodes
+
+### Text Truncation
+
+- **Long Titles**: Automatically truncated with ellipsis (...)
+- **Hover State**: May show full title on hover (implementation dependent)
+- **Responsive**: Adapts to container width
+
+### Episode Layout
+
+Each episode displays:
+
+- Episode title (with truncation if needed)
+- Episode duration (formatted as HH:MM:SS or MM:SS)
+- Click target for playback
+
+## Integration Notes
+
+- Renders as pure HTML string for insertion into DOM
+- Width typically set to ~400px for sidebar display
+- Handles overflow with scrolling for long lists
+- Click handlers should be attached after rendering
+- Integrates with audio player for track selection
+
+## Styling
+
+The playlist component uses:
+
+- Responsive width (typically constrained to container)
+- Overflow handling for scrollable lists
+- Distinct styling for current track
+- Text ellipsis for long titles
+- Consistent spacing and padding
+
+## Accessibility
+
+- Semantic HTML structure
+- Clear visual indication of current track
+- Clickable episode items
+- Duration information for screen readers
+- Proper contrast ratios for text and backgrounds
+
+## Use Cases
+
+**Queue Management**: Display upcoming episodes in play order
+**Navigation**: Allow users to jump to specific episodes
+**Context**: Show users what's playing and what's next
+**Discovery**: Preview episode titles and durations before playing

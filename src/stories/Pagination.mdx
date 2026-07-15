@@ -1,0 +1,86 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  Primary,
+  Stories,
+  Controls,
+} from "@storybook/addon-docs/blocks";
+import * as PaginationStories from "./Pagination.stories";
+
+<Meta of={PaginationStories} />
+
+# Pagination
+
+The Pagination component provides navigation controls for browsing through paginated lists of podcast episodes. This component enables users to move between pages of content efficiently, displaying page numbers and navigation buttons.
+
+## Features
+
+- Displays interactive page number buttons for direct navigation
+- Shows current active page with visual highlighting
+- Handles click events to update the current page
+- Dynamically calculates available pages based on episode count
+- Responsive button layout that adapts to content
+- Supports both sequential and direct page navigation
+- Automatically re-renders when page state changes
+
+## Props
+
+<Controls />
+
+### Prop Details
+
+- **state**: A partial IState object containing:
+  - **view**: The current view identifier (typically "detail" for podcast detail pages)
+  - **episodes**: Array of podcast episode objects used to calculate total pages
+  - **page**: The current active page number (1-indexed)
+
+## Usage
+
+The Pagination component is typically used in the podcast detail view to navigate through episodes when there are too many to display on a single page. It automatically calculates pagination based on episode count:
+
+```javascript
+const state = {
+  view: "detail",
+  episodes: allPodcastEpisodes,
+  page: 1,
+};
+
+paginationControls(state);
+```
+
+The component includes built-in event handling:
+
+- Clicking page number buttons updates the current page
+- The active page is visually distinguished from other pages
+- State is maintained and component re-renders on page changes
+
+## Default View
+
+The default view shows pagination controls on page 2, demonstrating navigation between multiple pages of content.
+
+<Primary />
+
+## Stories
+
+### Default
+
+Shows the pagination component on page 2, displaying how the component appears when navigating through middle pages of content.
+
+### FirstPage
+
+Demonstrates the pagination component on page 1, showing the initial state when viewing the first page of episodes.
+
+## All Stories
+
+<Stories />
+
+## Notes
+
+- The component uses Bootstrap's pagination styling for consistent appearance
+- Page numbers are stored in `data-page` attributes for event handling
+- Click events are delegated to the container for efficient event management
+- The component automatically calculates the total number of pages based on episode count
+- Active page styling uses the `.active` class for visual distinction
+- Page numbering is 1-indexed (starts at 1, not 0)
+- The component re-renders on state changes to reflect the current page

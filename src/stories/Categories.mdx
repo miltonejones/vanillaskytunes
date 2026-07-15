@@ -1,0 +1,78 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  Primary,
+  Stories,
+  Controls,
+} from "@storybook/addon-docs/blocks";
+import * as CategoriesStories from "./Categories.stories";
+
+<Meta of={CategoriesStories} />
+
+# Categories
+
+The Categories component displays a comprehensive list of the user's podcast subscriptions in a structured layout. This view serves as the main subscription management interface, allowing users to browse and access their subscribed podcasts.
+
+## Features
+
+- Displays all user podcast subscriptions in an organized list
+- Integrates with navigation bar for view switching
+- Responsive layout that adapts to different screen sizes
+- Optional limiting functionality for displaying subset of subscriptions
+- Maintains active state awareness for navigation highlighting
+- Supports footer integration for complete page layout
+
+## Props
+
+<Controls />
+
+### Prop Details
+
+- **state**: A partial IState object containing:
+  - **view**: The current view identifier (typically "categories") used for navigation state
+  - **podcasts**: Array of podcast subscription objects containing metadata like title, artwork, feed URL, and other podcast details
+
+## Usage
+
+The Categories component is typically rendered as a full-page layout view when users navigate to their subscriptions. It combines with the navigation bar to provide a complete user interface:
+
+```javascript
+const state = {
+  view: "categories",
+  podcasts: userPodcastSubscriptions,
+};
+
+renderCategories(state);
+```
+
+The component automatically:
+
+- Renders the navigation bar with proper active state
+- Displays all subscribed podcasts from the state
+- Handles responsive layout within the workspace container
+- Integrates with the application footer
+
+## Default View
+
+The default view shows the user's podcast subscriptions with the limit flag enabled, displaying podcasts in an organized list format with navigation controls.
+
+<Primary />
+
+## Stories
+
+### Default
+
+Demonstrates the standard categories view with a sample set of podcast subscriptions, showing how the component renders with typical user data.
+
+## All Stories
+
+<Stories />
+
+## Notes
+
+- The component uses a `workspace` container with Bootstrap styling for consistent layout
+- Navigation links are automatically highlighted based on the current view state
+- The component expects podcast data to include necessary metadata for rendering
+- This is a layout-level component that composes multiple smaller components (navigation, footer)
+- The limiting functionality can be used to show a condensed view of subscriptions when needed

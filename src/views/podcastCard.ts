@@ -1,7 +1,10 @@
 import type { IPodcast, IState } from "../interfaces";
 import { isSubscribed } from "../util";
 
-export const renderPodcastCard = (podcast: IPodcast, state: IState): string => {
+export const renderPodcastCard = (
+  podcast: IPodcast,
+  state: Partial<IState>
+): string => {
   const hasSubscription = isSubscribed(state, podcast);
   const safePodcastData = JSON.stringify(podcast).replace(/'/g, "&apos;");
 
@@ -13,7 +16,7 @@ export const renderPodcastCard = (podcast: IPodcast, state: IState): string => {
   const progress = thisCastKey ? trackMemory[thisCastKey].progress : 0;
   const progBar = progress
     ? `<div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-bar bg-info" style="width: ${progress}%"></div>
+        <div class="progress-bar bg-danger" style="width: ${progress}%"></div>
       </div>`
     : "";
 

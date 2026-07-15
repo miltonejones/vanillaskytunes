@@ -1,4 +1,5 @@
 // audioPlayer.ts
+import { renderAudioPlayer } from "../components/audio";
 import type { IState, ITrackMemory } from "../interfaces";
 import { renderPlaylist } from "../views/playlist";
 
@@ -44,13 +45,15 @@ export class AudioPlayer {
 
   private initializePlayer() {
     // Wait for DOM to be ready
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () =>
-        this.createPlayerElement()
-      );
-    } else {
-      this.createPlayerElement();
-    }
+
+    this.createPlayerElement();
+    // if (document.readyState === "loading") {
+    //   document.addEventListener("DOMContentLoaded", () =>
+    //     this.createPlayerElement()
+    //   );
+    // } else {
+    //   this.createPlayerElement();
+    // }
 
     this.store.subscribe((state: IState) => {
       this.render(state);
@@ -65,10 +68,21 @@ export class AudioPlayer {
   }
 
   private createPlayerElement() {
-    this.playerElement = document.getElementById("audio-player-container");
-    if (this.playerElement) {
-      this.bindPlayerEvents();
+    console.log("Creating player element");
+    this.playerElement = document.querySelector("#audio-player-container");
+    if (!this.playerElement) {
+      const newPlayerEl = document.createElement("div");
+      newPlayerEl.id = "audio-player-container";
+      document.body.appendChild(newPlayerEl);
+      this.playerElement = newPlayerEl;
     }
+    if (this.playerElement) {
+      console.log("Player element found");
+      this.playerElement.innerHTML = renderAudioPlayer();
+      this.bindPlayerEvents();
+      return;
+    }
+    console.log("Player element not found, creating new one");
   }
 
   private bindPlayerEvents() {
@@ -173,7 +187,15 @@ export class AudioPlayer {
 
     const isOpen = !!state.currentTrack;
     const isPlaying = state.isPlaying || false;
-    renderPlaylist(state);
+    const body = document.getElementById("offbody");
+    console.log("Rendering audio player...", { isOpen, isPlaying, state });
+    if (body) {
+      body.innerHTML = renderPlaylist(state);
+
+      const titleEl = document.querySelector("[data-display='title']");
+      if (titleEl)
+        titleEl.textContent = state.currentPodcast?.collectionName || "";
+    }
 
     // Update visibility
     if (isOpen) {
@@ -211,5 +233,9 @@ export class AudioPlayer {
 
   public update(state: IState) {
     this.render(state);
+  }
+
+  destroy() {
+    this.store.stopAudio();
   }
 }
